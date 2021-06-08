@@ -23,8 +23,8 @@ export function LoadingIcon(props) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 496 496"
-      width="1em"
-      height="1em"
+      width="3em"
+      height="3em"
       {...props}
     >
       <path

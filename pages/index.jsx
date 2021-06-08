@@ -7,12 +7,12 @@ import Loading from '../components/Loading';
 
 function Home() {
   const inputIp = useRef();
-  const [ipAddr, setIpAddr] = useState(null);
-  const [location, setLocation] = useState(null);
-  const [timezone, setTimezone] = useState(null);
-  const [isp, setIsp] = useState(null);
-  const [lat, setLat] = useState(null);
-  const [lon, setLon] = useState(null);
+  const [ipAddr, setIpAddr] = useState('');
+  const [location, setLocation] = useState('');
+  const [timezone, setTimezone] = useState('');
+  const [isp, setIsp] = useState('');
+  const [lat, setLat] = useState('');
+  const [lon, setLon] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({
     isError: false,
@@ -53,9 +53,7 @@ function Home() {
     handleSearch();
   };
 
-  useEffect(() => {
-    handleSearch();
-  }, []);
+  useEffect(handleSearch, []);
 
   return (
     <>
