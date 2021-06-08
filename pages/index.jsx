@@ -14,25 +14,37 @@ function Home() {
   const [lat, setLat] = useState(null);
   const [lon, setLon] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({
+    isError: false,
+    message: '',
+  });
 
   const handleSearch = () => {
     setLoading(true);
     const query = inputIp.current.value;
-    const fields = 'query,city,countryCode,zip,timezone,isp,lat,lon';
-    const url = `http://ip-api.com/json/${query}?fields=${fields}`;
+    const fields = 'success,message,ip,city,country,region,timezone,isp,latitude,longitude';
+    const url = `https://ipwhois.app/json/${query}?objects=${fields}`;
 
     fetch(url)
       .then((res) => res.json())
       .then((res) => {
-        setIpAddr(res.query);
-        setLocation(`${res.city}, ${res.countryCode} ${res.zip}`);
+        if (!res.success) {
+          setError({
+            isError: true,
+            message: res.message,
+          });
+          return;
+        }
+
+        setError({ isError: false });
+        setIpAddr(res.ip);
+        setLocation(`${res.city}, ${res.region}, ${res.country}`);
         setTimezone(res.timezone);
         setIsp(res.isp);
-        setLat(res.lat);
-        setLon(res.lon);
+        setLat(res.latitude);
+        setLon(res.longitude);
       })
-      // eslint-disable-next-line no-console
-      .catch((err) => console.error(err))
+      .catch((err) => setError({ isError: true, message: err }))
       .finally(() => setLoading(false));
   };
 
@@ -57,20 +69,25 @@ function Home() {
               type="text"
               ref={inputIp}
               placeholder="Search for any IP address or domain"
-              autoComplete={false}
               disabled={loading}
             />
-            <button className="px-5 bg-gray-very-dark rounded-r-xl" type="submit">
+            <button className="px-5 bg-gray-very-dark rounded-r-xl" type="submit" disabled={loading}>
               <ArrowIcon />
             </button>
           </form>
         </div>
         <div className="relative z-10">
-          {loading ? (
+          {loading && (
             <Card className="justify-center" style={{ display: 'flex' }}>
               <Loading />
             </Card>
-          ) : (
+          )}
+          {!loading && error.isError && (
+            <Card className="justify-center border border-red-500" style={{ display: 'flex' }}>
+              <h2 className="font-bold text-red-500 uppercase">{error.message}</h2>
+            </Card>
+          )}
+          {!loading && !error.isError && (
             <Card>
               <CardItem title="ip address" content={ipAddr} />
               <CardItem className="sm:px-6 sm:border-l" title="location" content={location} />
