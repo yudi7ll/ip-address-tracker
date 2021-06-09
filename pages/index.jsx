@@ -22,7 +22,7 @@ function Home() {
   const handleSearch = () => {
     setLoading(true);
     const query = inputIp.current.value;
-    const fields = 'success,message,ip,city,country,region,timezone,isp,latitude,longitude';
+    const fields = 'success,message,ip,city,country,region,timezone_gmt,isp,latitude,longitude';
     const url = `https://ipwhois.app/json/${query}?objects=${fields}`;
 
     fetch(url)
@@ -39,7 +39,7 @@ function Home() {
         setError({ isError: false });
         setIpAddr(res.ip);
         setLocation(`${res.city}, ${res.region}, ${res.country}`);
-        setTimezone(res.timezone);
+        setTimezone(res.timezone_gmt);
         setIsp(res.isp);
         setLat(res.latitude);
         setLon(res.longitude);
