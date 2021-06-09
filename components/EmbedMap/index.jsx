@@ -4,6 +4,8 @@ function EmbedMap({ lat, lon }) {
   return (
     <iframe
       src={embedMaps}
+      marginHeight={0}
+      marginWidth={0}
       height="500"
       width="100%"
       scrolling="no"
